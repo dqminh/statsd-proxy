@@ -1,3 +1,10 @@
+// # Sample client code for statsd-proxy
+//
+// How to use:
+//    var statsd = new Statsd("app.production");
+//    statsd.increment("test.inc", 0.1);
+//    statsd.decrement("test.dec", 0.1);
+//    statsd.timing("test.timing", 100, 0.1);
 window.Statsd = (function($) {
   function Statsd(prefix) {
     this.prefix = prefix;
