@@ -26,16 +26,22 @@ def statsd
 end
 
 get '/increment' do
-  statsd.increment params["name"], params["sample_rate"].to_f
+  args = [params["name"]]
+  args << params["sample_rate"].to_f if params["sample_rate"]
+  statsd.increment *args
   204
 end
 
 get '/decrement' do
-  statsd.decrement params["name"], params["sample_rate"].to_f
+  args = [params["name"]]
+  args << params["sample_rate"].to_f if params["sample_rate"]
+  statsd.decrement *args
   204
 end
 
 get '/timing' do
-  statsd.timing params["name"], params["value"].to_f, params["sample_rate"].to_f
+  args = [params["name"], params["value"].to_f]
+  args << params["sample_rate"].to_f if params["sample_rate"]
+  statsd.timing *args
   204
 end

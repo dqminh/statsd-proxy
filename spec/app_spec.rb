@@ -13,6 +13,11 @@ describe 'Statsd Proxy' do
       response.status.should eq(204)
     end
 
+    it 'does not require sample rate' do
+      request[1].delete :sample_rate
+      statsd.should_receive(:increment).with('test.inc')
+      response = xhr *request
+    end
   end
 
   describe '#decrement' do
@@ -24,6 +29,11 @@ describe 'Statsd Proxy' do
       response.status.should eq(204)
     end
 
+    it 'does not require sample rate' do
+      request[1].delete :sample_rate
+      statsd.should_receive(:decrement).with('test.dec')
+      response = xhr *request
+    end
   end
 
   describe "#timing" do
@@ -34,5 +44,10 @@ describe 'Statsd Proxy' do
       response.status.should eq(204)
     end
 
+    it 'does not require sample rate' do
+      request[1].delete :sample_rate
+      statsd.should_receive(:timing).with('test.timing', 100)
+      response = xhr *request
+    end
   end
 end
