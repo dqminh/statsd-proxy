@@ -26,19 +26,16 @@ def statsd
 end
 
 get '/increment' do
-  return 403 unless request.xhr?
   statsd.increment params["name"], params["sample_rate"].to_f
   204
 end
 
 get '/decrement' do
-  return 403 unless request.xhr?
   statsd.decrement params["name"], params["sample_rate"].to_f
   204
 end
 
 get '/timing' do
-  return 403 unless request.xhr?
   statsd.timing params["name"], params["value"].to_f, params["sample_rate"].to_f
   204
 end

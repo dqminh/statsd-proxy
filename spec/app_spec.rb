@@ -5,13 +5,6 @@ describe 'Statsd Proxy' do
   let(:statsd) { stub }
   before { Statsd.stub(:new) { statsd } }
 
-  shared_examples_for "a request that only allows ajax" do
-    it 'only allow ajax request' do
-      response = get *request
-      response.status.should eq(403)
-    end
-  end
-
   describe '#increment' do
     let(:request) { ['/increment', {name: "test.inc", sample_rate: 0.1}] }
     it 'sends increment request' do
@@ -20,7 +13,6 @@ describe 'Statsd Proxy' do
       response.status.should eq(204)
     end
 
-    it_behaves_like "a request that only allows ajax"
   end
 
   describe '#decrement' do
@@ -32,7 +24,6 @@ describe 'Statsd Proxy' do
       response.status.should eq(204)
     end
 
-    it_behaves_like "a request that only allows ajax"
   end
 
   describe "#timing" do
@@ -43,6 +34,5 @@ describe 'Statsd Proxy' do
       response.status.should eq(204)
     end
 
-    it_behaves_like "a request that only allows ajax"
   end
 end
