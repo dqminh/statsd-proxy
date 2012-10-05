@@ -11,37 +11,32 @@ window.Statsd = (function($) {
     this.prefix = prefix;
   }
 
+  Statsd.prototype.send_request = function(endpoint, data) {
+    var url = this.host + endpoint + "?" + $.param(data);
+    var image = new Image();
+    image.src = url;
+    return false
+  };
+
   Statsd.prototype.increment = function(name, sampleRate) {
-    $.ajax({
-      url: this.host + "/increment",
-      crossDomain: true,
-      data: {
-        name: this.prefix + "."  + name,
-        sample_rate: sampleRate
-      }
+    this.send_request("/increment", {
+      name: this.prefix + "."  + name,
+      sample_rate: sampleRate
     });
   };
 
   Statsd.prototype.decrement = function(name, sampleRate) {
-    $.ajax({
-      url: this.host + "/decrement",
-      crossDomain: true,
-      data: {
-        name: this.prefix + "."  + name,
-        sample_rate: sampleRate
-      }
+    this.send_request("/decrement", {
+      name: this.prefix + "."  + name,
+      sample_rate: sampleRate
     });
   };
 
   Statsd.prototype.timing = function(name, value, sampleRate) {
-    $.ajax({
-      url: this.host + "/timing",
-      crossDomain: true,
-      data: {
-        name: this.prefix + "."  + name,
-        value: value,
-        sample_rate: sampleRate
-      }
+    this.send_request("/timing", {
+      name: this.prefix + "."  + name,
+      value: value,
+      sample_rate: sampleRate
     });
   };
 

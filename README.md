@@ -21,5 +21,4 @@ required:
 
 - `STATSD_HOST`: host of statsd server
 - `STATSD_PORT`: port of statsd server
-- `DEFAULT_HOST`: to perform whitelist in CORS
 - `RACK_ENV`: most likely you will set this to `production` 

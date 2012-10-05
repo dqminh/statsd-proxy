@@ -5,13 +5,11 @@ require "bundler/setup"
 require "sinatra"
 require "sinatra/reloader" if RACK_ENV == "development"
 require "statsd"
-require "rack/cors"
 
 # Default app settings
 set :environment, RACK_ENV.to_sym
 set :logging, true
 set :raise_errors, true
-set :protection, :except => :json_csrf # https://github.com/sinatra/sinatra/issues/518
 
 def build_client
   Statsd.new ENV['STATSD_HOST'], ENV['STATSD_PORT']
@@ -25,23 +23,33 @@ def statsd
   end
 end
 
+# we never allowed sample rate to be 0
+def get_sample_rate(params)
+  sample_rate = params["sample_rate"].to_f
+  return nil if sample_rate == 0
+  sample_rate
+end
+
 get '/increment' do
+  sample_rate = get_sample_rate(params)
   args = [params["name"]]
-  args << params["sample_rate"].to_f if params["sample_rate"]
+  args << sample_rate if sample_rate
   statsd.increment *args
-  204
+  [200, {'Content-Type' => 'image/gif'}, ""]
 end
 
 get '/decrement' do
+  sample_rate = get_sample_rate(params)
   args = [params["name"]]
-  args << params["sample_rate"].to_f if params["sample_rate"]
+  args << sample_rate if sample_rate
   statsd.decrement *args
-  204
+  [200, {'Content-Type' => 'image/gif'}, ""]
 end
 
 get '/timing' do
+  sample_rate = get_sample_rate(params)
   args = [params["name"], params["value"].to_f]
-  args << params["sample_rate"].to_f if params["sample_rate"]
+  args << sample_rate if sample_rate
   statsd.timing *args
-  204
+  [200, {'Content-Type' => 'image/gif'}, ""]
 end

@@ -5,7 +5,6 @@ ruby "1.9.3"
 gem 'thin', '~> 1.4.1'
 gem 'sinatra', '~> 1.3.3'
 gem "statsd-ruby", '~> 1.0.0', :require => "statsd"
-gem 'rack-cors', '~> 0.2.7'
 
 group :development do
   gem "foreman", '~> 0.51.0'
